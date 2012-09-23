@@ -70,7 +70,7 @@ c99.Game = (function() {
     console.log("Count99 game starts.");
 
     this.nextCount = 1;
-    this.totalTiles = 10;
+    this.totalTiles = 3;
 
     this.nextTileLabel = document.getElementById('next-tile');
 
@@ -98,7 +98,17 @@ c99.Game = (function() {
       tile.onClick = (function(event) {                
         if (event.target.number === this.nextCount) {
           var removeResult = this.stage.removeChild(event.target);          
-          this.nextCount++;
+          this.nextCount++;          
+
+          // game over, player wins.
+          if (this.nextCount > this.totalTiles) {
+            this.nextCount = this.totalTiles;
+
+            var gameoverScene = document.getElementById('gameover-win');
+            gameoverScene.classList.add('gameover-appear');
+          }
+
+          // update visually.
           this.nextTileLabel.innerText = this.nextCount;
           this.stage.update();
         }
