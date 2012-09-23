@@ -7,8 +7,16 @@ html, body {
   height: 100%;
 }
 canvas {
-  background: #efefef;
+  background: #efefef;  
+}
+
+#game * {
   -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 #game {
