@@ -32,8 +32,10 @@ c99.CommonShapes = (function() {
 })();
 
 c99.Tile = (function(){  
-  function Tile(text){    
+  function Tile(number){       
     this.initialize();
+
+    this.number = number;
 
     this.width = 80;
     this.height = this.width;
@@ -47,7 +49,7 @@ c99.Tile = (function(){
     });    
     this.addChild(shape);
 
-    var numberText = new createjs.Text(text, "24px Helvetica", "#fff");
+    var numberText = new createjs.Text(number, "24px Helvetica", "#fff");
     // place it at the center of the tile box.
     numberText.x = this.width/2;
     numberText.y = this.height/2;    
@@ -55,21 +57,19 @@ c99.Tile = (function(){
     // align cetner, vertically and horizontally.
     numberText.textAlign = "center";    
     numberText.textBaseline = "middle";
-    this.addChild(numberText);
-
-    this.onClick = function() {
-      alert('you clicked me?');
-    }
+    this.addChild(numberText);    
   }  
   var p = Tile.prototype = new createjs.Container();
 
   return Tile;
 })();
 
-c99.Game = (function() {  
-  // constructor
+c99.Game = (function() {    
+  // constructor  
   function Count99Game() {
     console.log("Count99 game starts.");
+
+    this.nextCount = 1;
 
     var canvas = document.getElementById('game-canvas');
     
@@ -82,14 +82,21 @@ c99.Game = (function() {
       var tile = new c99.Tile(i); 
       tile.x = c99.Utils.randomInt(0, canvas.width-tile.width);
       tile.y = c99.Utils.randomInt(0, canvas.height-tile.height);      
+      tile.onClick = (function(event) {        
+        console.log (this.nextCount, event.target.number);        
+        if (event.target.number === this.nextCount) {
+          var removeResult = stage.removeChild(event.target);
+          console.log ('Removed? ', removeResult);
+          this.nextCount++;
+          stage.update();
+        }
+      }).bind(this);
       stage.addChild(tile);
     }
     
     // update the stage
     stage.update();   
-
-    
-  }
+  }  
 
   return Count99Game;
 })();
