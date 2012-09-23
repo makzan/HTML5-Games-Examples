@@ -1,3 +1,34 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  font-family: Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+}
 canvas {
   background: #efefef;
+}
+
+#game {
+  width: 480px;
+  height: 320px;
+  border: 1px solid black;
+  box-shadow: 0 0 0 3px gray;
+  position: relative;
+  margin: auto; 
+}
+
+#hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  color: white;
+  padding: 5px;
+  background: rgba(0,0,0,.8);
+}
+
+#next-tile {
+  font-size: 1.2em;
 }
