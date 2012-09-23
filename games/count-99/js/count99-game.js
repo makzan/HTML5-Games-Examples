@@ -77,6 +77,7 @@ c99.Game = (function() {
     
     // EaselJS Stage
     this.stage = new createjs.Stage(this.canvas);
+    createjs.Touch.enable(this.stage, /*singleTouch=*/ true, /*allowDefault=*/false);
 
     this.initGame();
 
