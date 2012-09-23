@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Untangle Puzzle Game in Canvas</title>
+	<link rel="stylesheet" href="css/untangle.css" />
+	<link href='http://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Josefin+Sans:600' rel='stylesheet' type='text/css'>
+</head>
+<body>
+	<section id="page">
+		<header>
+			<h1>Untangle Puzzle Game in Canvas</h1>
+		</header>	
+		
+		<section id="layers">
+			<canvas id="bg" width="768" height="440">
+				Sorry, your web browser does not support canvas content.
+			</canvas>
+			<canvas id="guide" width="768" height="440"></canvas>
+			<canvas id="game" width="768" height="440"></canvas>
+			<canvas id="ui" width="768" height="440"></canvas>
+		</section>
+		<p>Puzzle <span id="level">0</span>, Completeness: <span id="progress">0</span>%</p>
+		
+		<footer>
+			<p>This is an example of Untangle Puzzle Game in Canvas.</p>
+		</footer>
+	</section>
+
+<script src="js/jquery-1.6.min.js"></script>
+<script src="js/html5games.untangle.js"></script>
+</body>
+</html>
