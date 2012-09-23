@@ -8,6 +8,7 @@ html, body {
 }
 canvas {
   background: #efefef;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #game {
