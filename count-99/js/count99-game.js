@@ -70,33 +70,45 @@ c99.Game = (function() {
     console.log("Count99 game starts.");
 
     this.nextCount = 1;
+    this.totalTiles = 10;
 
-    var canvas = document.getElementById('game-canvas');
+    this.nextTileLabel = document.getElementById('next-tile');
+
+    this.canvas = document.getElementById('game-canvas');
     
     // EaselJS Stage
-    stage = new createjs.Stage(canvas);
+    this.stage = new createjs.Stage(this.canvas);
 
+    this.createTiles();
+       
+  }  
+
+  var p = Count99Game.prototype;
+
+  p.createTiles = function() {
     // many tiles
-    for(var i=10;i>0;i--)
+    for(var i=this.totalTiles;i>0;i--)
     {
       var tile = new c99.Tile(i); 
-      tile.x = c99.Utils.randomInt(0, canvas.width-tile.width);
-      tile.y = c99.Utils.randomInt(0, canvas.height-tile.height);      
-      tile.onClick = (function(event) {        
-        console.log (this.nextCount, event.target.number);        
+
+      // random position within the canvas
+      tile.x = c99.Utils.randomInt(0, this.canvas.width-tile.width);
+      tile.y = c99.Utils.randomInt(0, this.canvas.height-tile.height);      
+
+      tile.onClick = (function(event) {                
         if (event.target.number === this.nextCount) {
-          var removeResult = stage.removeChild(event.target);
-          console.log ('Removed? ', removeResult);
+          var removeResult = this.stage.removeChild(event.target);          
           this.nextCount++;
-          stage.update();
+          this.nextTileLabel.innerText = this.nextCount;
+          this.stage.update();
         }
       }).bind(this);
-      stage.addChild(tile);
+      this.stage.addChild(tile);
     }
     
     // update the stage
-    stage.update();   
-  }  
+    this.stage.update();
+  }
 
   return Count99Game;
 })();
