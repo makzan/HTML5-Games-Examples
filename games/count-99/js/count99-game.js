@@ -69,8 +69,7 @@ c99.Game = (function() {
   function Count99Game() {
     console.log("Count99 game starts.");
 
-    this.nextCount = 1;
-    this.totalTiles = 10;
+    this.totalTiles = 3;    
 
     this.nextTileLabel = document.getElementById('next-tile');
 
@@ -79,13 +78,22 @@ c99.Game = (function() {
     // EaselJS Stage
     this.stage = new createjs.Stage(this.canvas);
 
-    this.createTiles();
+    this.initGame();
+
+    var restartButton = document.getElementById('restart-button');
+    restartButton.onclick = (function(event) {
+      var gameoverScene = document.getElementById('gameover-win');
+      gameoverScene.classList.remove('gameover-appear');
+      this.initGame();
+    }).bind(this);
        
   }  
 
   var p = Count99Game.prototype;
 
-  p.createTiles = function() {
+  p.initGame = function() {
+    this.nextCount = 1;
+    
     // many tiles
     for(var i=this.totalTiles;i>0;i--)
     {
@@ -95,18 +103,31 @@ c99.Game = (function() {
       tile.x = c99.Utils.randomInt(0, this.canvas.width-tile.width);
       tile.y = c99.Utils.randomInt(0, this.canvas.height-tile.height);      
 
-      tile.onClick = (function(event) {                
+      tile.onPress = (function(event) {                
         if (event.target.number === this.nextCount) {
           var removeResult = this.stage.removeChild(event.target);          
-          this.nextCount++;
-          this.nextTileLabel.innerText = this.nextCount;
-          this.stage.update();
+          this.nextCount++;          
+
+          // game over, player wins.
+          if (this.nextCount > this.totalTiles) {
+            this.nextCount = this.totalTiles;
+
+            var gameoverScene = document.getElementById('gameover-win');
+            gameoverScene.classList.add('gameover-appear');
+          }
+
+          // update visually.
+          this.updateView();
         }
       }).bind(this);
       this.stage.addChild(tile);
     }
     
-    // update the stage
+    this.updateView();
+  }
+
+  p.updateView = function() {
+    this.nextTileLabel.innerText = this.nextCount;
     this.stage.update();
   }
 

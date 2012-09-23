@@ -7,8 +7,16 @@ html, body {
   height: 100%;
 }
 canvas {
-  background: #efefef;
+  background: #efefef;  
+}
+
+#game * {
   -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 #game {
@@ -18,6 +26,7 @@ canvas {
   box-shadow: 0 0 0 3px gray;
   position: relative;
   margin: auto; 
+  overflow: hidden;
 }
 
 #hud {
@@ -32,4 +41,23 @@ canvas {
 
 #next-tile {
   font-size: 1.2em;
+}
+
+#gameover-win {
+  position: absolute;
+  top: -320px;
+  left: 0;
+  width: 480px;
+  height: 270px;
+  background: white;
+  text-align: center;
+  padding-top: 50px;
+  font-size: 2em;
+}
+
+#gameover-win.gameover-appear {
+  top: 0;
+  -webkit-transition: top .3s ease-out;
+  -moz-transition: top .3s ease-out;
+  transition: top .3s ease-out;
 }
