@@ -163,3 +163,111 @@ a:hover {
 .cardDK {background-position: -960px -360px;}
 
 
+
+
+/* Styles for game over popup */
+#popup {
+	font-family: 'Orbitron', serif;
+	font-size: 28px;
+	font-weight: 700;	  
+	text-shadow: 0px 1px 2px #fff;
+	
+	color: #222;
+	
+	position: absolute;	  
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	
+	background: rgba(0,0,0,.5);
+	
+	display: -webkit-box;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;			
+	
+	-webkit-transition: all .5s ease-in;
+}
+
+#popup h1 {
+	font-weight: 400;
+}
+
+#popup-box {
+	width: 400px;
+	height: 300px;
+	background: #ccc url(../images/popup_bg.jpg);
+	
+	border-radius: 10px;
+	
+	position: relative;
+	
+	-webkit-box-shadow: 0 5px 5px #333;
+	
+	display: -webkit-box;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+	
+	-webkit-transition: all .5s ease-in;
+}
+
+#popup-box small {
+	font-size: .6em;
+}
+
+/**
+ * Styles to hide the popup box
+ */
+#popup.hide {
+	background: rgba(0,0,0,0);
+	visibility: hidden;		
+}
+#popup.hide #popup-box{
+	margin-top: -800px;
+}
+
+
+/**
+ * Styles for the ribbon
+ */
+ .ribbon.hide {
+ 	display: none;
+ }
+ 
+.ribbon {
+	float: left;
+	position: absolute;
+	
+	left: -7px;
+	top: 165px;	
+	
+	z-index: 0;
+
+	font-size: .5em;
+	text-transform: uppercase;
+	text-align: right;
+}
+
+.ribbon-body {
+	height: 14px;
+	background: #ca3d33;
+	padding: 6px;
+	z-index: 100;
+	-webkit-box-shadow: 2px 2px 0 rgba(150,120,70,.4);
+	border-radius: 0 5px 5px 0;
+	
+	color: #fff;
+	text-shadow: 0px 1px 1px rgba(0,0,0,.3);
+}
+
+.triangle{
+	position: relative;
+	height: 0px;
+	width: 0;
+	left: -5px;
+	top: -32px;
+	border-style: solid;
+	border-width: 6px;
+	border-color: transparent #882011 transparent transparent;
+	z-index: -1;
+}
