@@ -31,9 +31,10 @@ c99.CommonShapes = (function() {
   return CommonShapes;
 })();
 
-c99.Tile = (function(){
-  var numberText;
-  function Tile(){    
+c99.Tile = (function(){  
+  function Tile(text){    
+    this.initialize();
+
     this.width = 80;
     this.height = this.width;
 
@@ -42,11 +43,11 @@ c99.Tile = (function(){
       y: 0,
       width: this.width,
       height: this.height, 
-      fillColor: "#333",     
+      fillColor: createjs.Graphics.getRGB(c99.Utils.randomInt(0,256),c99.Utils.randomInt(0,256),c99.Utils.randomInt(0,256)),     
     });    
     this.addChild(shape);
 
-    numberText = new createjs.Text("123", "24px Helvetica", "#fff");
+    var numberText = new createjs.Text(text, "24px Helvetica", "#fff");
     // place it at the center of the tile box.
     numberText.x = this.width/2;
     numberText.y = this.height/2;    
@@ -61,9 +62,7 @@ c99.Tile = (function(){
     }
   }  
   var p = Tile.prototype = new createjs.Container();
-  p.setText = function(text) {
-    numberText.text = text;
-  }
+
   return Tile;
 })();
 
@@ -75,21 +74,21 @@ c99.Game = (function() {
     var canvas = document.getElementById('game-canvas');
     
     // EaselJS Stage
-    var stage = new createjs.Stage(canvas);
+    stage = new createjs.Stage(canvas);
 
     // many tiles
-    for(var i=0;i<10;i++)
+    for(var i=10;i>0;i--)
     {
-      var tile = new c99.Tile(); 
+      var tile = new c99.Tile(i); 
       tile.x = c99.Utils.randomInt(0, canvas.width-tile.width);
-      tile.y = c99.Utils.randomInt(0, canvas.height-tile.height);
-      tile.setText(i);
-      stage.addChild(tile);      
+      tile.y = c99.Utils.randomInt(0, canvas.height-tile.height);      
+      stage.addChild(tile);
     }
     
-
     // update the stage
-    stage.update();
+    stage.update();   
+
+    
   }
 
   return Count99Game;
