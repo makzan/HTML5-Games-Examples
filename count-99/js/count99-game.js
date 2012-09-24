@@ -69,7 +69,7 @@ c99.Game = (function() {
   function Count99Game() {
     console.log("Count99 game starts.");
 
-    this.totalTiles = 99;    
+    this.totalTiles = 20;    
 
     this.nextTileLabel = document.getElementById('next-tile');
 
