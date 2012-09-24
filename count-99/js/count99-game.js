@@ -111,10 +111,7 @@ c99.Game = (function() {
 
           // game over, player wins.
           if (this.nextCount > this.totalTiles) {
-            this.nextCount = this.totalTiles;
-
-            var gameoverScene = document.getElementById('gameover-win');
-            gameoverScene.classList.add('gameover-appear');
+            this.gameOver();
           }
 
           // update visually.
@@ -130,6 +127,15 @@ c99.Game = (function() {
   p.updateView = function() {
     this.nextTileLabel.innerText = this.nextCount;
     this.stage.update();
+  }
+  
+  p.gameOver = function() {
+    // force the next count to be the total tiles maximum.
+    this.nextCount = this.totalTiles;
+  
+    // display the game over scene.
+    var gameoverScene = document.getElementById('gameover-win');
+    gameoverScene.classList.add('gameover-appear');
   }
 
   return Count99Game;
