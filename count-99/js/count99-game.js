@@ -1,21 +1,21 @@
 // window/global scope
-var c99 = {}
+var c99 = {};
 
 c99.Utils = (function() {
   function Utils(){}
   // return a random integer from a to b. 
   // Including a, excluding b
   Utils.randomInt = function(a, b) {
-    return Math.floor(Math.random() * (b-a)) + a
-  }
+    return Math.floor(Math.random() * (b-a)) + a;
+  };
   return Utils;
 })();
 
 c99.CommonShapes = (function() {
   function CommonShapes(){}
   CommonShapes.rectangle = function(rect) {    
-    if (rect.strokeColor == undefined) rect.strokeColor = "#000";
-    if (rect.fillColor == undefined) rect.fillColor = "#000";
+    if (rect.strokeColor === undefined) rect.strokeColor = "#000";
+    if (rect.fillColor === undefined) rect.fillColor = "#000";
     var shape = new createjs.Shape();
     if (rect.strokeThickness > 0)
     {
@@ -26,7 +26,7 @@ c99.CommonShapes = (function() {
     shape.graphics.rect(rect.x, rect.y, rect.width, rect.height);
     shape.graphics.endFill();
     return shape;
-  }
+  };
   
   return CommonShapes;
 })();
@@ -94,6 +94,21 @@ c99.Game = (function() {
 
   p.initGame = function() {
     this.nextCount = 1;
+
+    var tileOnPress = function(event) {                
+      if (event.target.number === this.nextCount) {
+        this.stage.removeChild(event.target);          
+        this.nextCount++;          
+
+        // game over, player wins.
+        if (this.nextCount > this.totalTiles) {
+          this.gameOver();
+        }
+
+        // update visually.
+        this.updateView();
+      }
+    };
     
     // many tiles
     for(var i=this.totalTiles;i>0;i--)
@@ -104,30 +119,17 @@ c99.Game = (function() {
       tile.x = c99.Utils.randomInt(0, this.canvas.width-tile.width);
       tile.y = c99.Utils.randomInt(0, this.canvas.height-tile.height);      
 
-      tile.onPress = (function(event) {                
-        if (event.target.number === this.nextCount) {
-          var removeResult = this.stage.removeChild(event.target);          
-          this.nextCount++;          
-
-          // game over, player wins.
-          if (this.nextCount > this.totalTiles) {
-            this.gameOver();
-          }
-
-          // update visually.
-          this.updateView();
-        }
-      }).bind(this);
+      tile.onPress = (tileOnPress).bind(this);
       this.stage.addChild(tile);
     }
     
     this.updateView();
-  }
+  };
 
   p.updateView = function() {
     this.nextTileLabel.innerText = this.nextCount;
     this.stage.update();
-  }
+  };
   
   p.gameOver = function() {
     // force the next count to be the total tiles maximum.
@@ -136,7 +138,7 @@ c99.Game = (function() {
     // display the game over scene.
     var gameoverScene = document.getElementById('gameover-win');
     gameoverScene.classList.add('gameover-appear');
-  }
+  };
 
   return Count99Game;
 })();
@@ -144,4 +146,4 @@ c99.Game = (function() {
 window.onload = function() {
   // entry point
   var game = new c99.Game();
-}
+};
