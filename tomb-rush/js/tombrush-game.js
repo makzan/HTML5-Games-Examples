@@ -38,7 +38,7 @@ tombrush.CommonShapes = (function() {
 
 tombrush.Tile = (function(){  
   function Tile(number){       
-    this.initialize(); // initializing the createjs Container
+    this.initialize();
 
     this.number = number;
 
@@ -59,14 +59,13 @@ tombrush.Tile = (function(){
 
 tombrush.Hero = (function(){
   function Hero() {
-    this.initialize(); // initializing the createjs Container
+    this.initialize();
   };
   var p = Hero.prototype = new createjs.Container();
 
   // Public properties
   p.dropSpeed = 1;
   p.velocity = new createjs.Point(0, 0);
-
   
   // super initialize
   p.Container_initialize = p.initialize;
@@ -99,6 +98,30 @@ tombrush.Hero = (function(){
   return Hero;
 })();
 
+tombrush.Platform = (function(){
+  function Platform(){
+    this.initialize();
+  }
+  var p = Platform.prototype = new createjs.Container();
+
+  p.Container_initialize = p.initialize;
+  p.initialize = function() {
+    this.Container_initialize(); // super init
+
+    this.width = 80;
+    this.height = 10;
+
+    var shape = tombrush.CommonShapes.rectangle({
+      width: this.width,
+      height: this.height,      
+    });
+    this.addChild(shape);
+  }
+
+  return Platform;
+})();
+
+
 tombrush.Game = (function() {    
   // constructor  
   function TombRushGame() {
@@ -122,6 +145,11 @@ tombrush.Game = (function() {
   var p = TombRushGame.prototype;
 
   p.initGame = function() {
+
+    var platform = new tombrush.Platform();
+    platform.x = 50;
+    platform.y = 150;
+    this.stage.addChild(platform);
     
     var hero = new tombrush.Hero();
     hero.x = 100;
