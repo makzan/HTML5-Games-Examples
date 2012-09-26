@@ -1,5 +1,5 @@
 // window/global scope
-var tombrush = {}
+var tombrush = {};
 
 tombrush.Utils = (function() {
   function Utils(){}
@@ -7,7 +7,7 @@ tombrush.Utils = (function() {
   // Including a, excluding b
   Utils.randomInt = function(a, b) {
     return Math.floor(Math.random() * (b-a)) + a;
-  }
+  };
   return Utils;
 })();
 
@@ -29,7 +29,7 @@ tombrush.CommonShapes = (function() {
     shape.graphics.rect(rect.x, rect.y, rect.width, rect.height);
     shape.graphics.endFill();
     return shape;
-  }
+  };
   
   return CommonShapes;
 })();
@@ -93,4 +93,4 @@ tombrush.Game = (function() {
 window.onload = function() {
   // entry point
   var game = new tombrush.Game();
-}
+};
