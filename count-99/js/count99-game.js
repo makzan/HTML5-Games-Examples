@@ -14,12 +14,16 @@ c99.Utils = (function() {
 c99.CommonShapes = (function() {
   function CommonShapes(){}
   CommonShapes.rectangle = function(rect) {    
-    if (rect.strokeColor === undefined) rect.strokeColor = "#000";
-    if (rect.fillColor === undefined) rect.fillColor = "#000";
+    rect.x = rect.x || 0;
+    rect.y = rect.y || 0;
+    rect.width = rect.width || 0;
+    rect.height = rect.height || 0;
+    rect.strokeColor = rect.strokeColor || "#000";
+    rect.fillColor = rect.fillColor || "#000";
     var shape = new createjs.Shape();
     if (rect.strokeThickness > 0)
     {
-      shape.graphics.setStrokeStyle(rect.strokeThickness);
+     shape.graphics.setStrokeStyle(rect.strokeThickness);
       shape.graphics.beginStroke(rect.strokeColor);  
     }    
     shape.graphics.beginFill(rect.fillColor);
@@ -31,6 +35,7 @@ c99.CommonShapes = (function() {
   return CommonShapes;
 })();
 
+//
 c99.Tile = (function(){  
   function Tile(number){       
     this.initialize();
@@ -41,8 +46,6 @@ c99.Tile = (function(){
     this.height = this.width;
 
     var shape = c99.CommonShapes.rectangle({
-      x: 0,
-      y: 0,
       width: this.width,
       height: this.height, 
       fillColor: createjs.Graphics.getRGB(c99.Utils.randomInt(0,256),c99.Utils.randomInt(0,256),c99.Utils.randomInt(0,256)),     
