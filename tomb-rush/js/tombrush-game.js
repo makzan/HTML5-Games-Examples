@@ -1,3 +1,8 @@
+var debug = {};
+debug.log = function (message) {
+  document.getElementById('debug-output').innerHTML += message + '<br>';
+}
+
 // window/global scope
 var tombrush = {};
 
@@ -13,13 +18,13 @@ tombrush.Utils = (function() {
 
 tombrush.CommonShapes = (function() {
   function CommonShapes(){}
-  CommonShapes.rectangle = function(rect) {    
-    if (rect.strokeColor === undefined) rect.strokeColor = "#000";
-    if (rect.fillColor === undefined) rect.fillColor = "#000";
-    if (rect.x === undefined) rect.x = 0;
-    if (rect.y === undefined) rect.y = 0;
-    if (rect.width === undefined) rect.width = 0;
-    if (rect.height === undefined) rect.height = 0;
+  CommonShapes.rectangle = function(rect) {   
+    rect.strokeColor = rect.strokeColor || "#000";    
+    rect.fillColor = rect.fillColor || "#000";
+    rect.x = rect.x || 0;
+    rect.y = rect.y || 0;
+    rect.width = rect.width || 0;
+    rect.height = rect.height || 0;
     
     var shape = new createjs.Shape();
     if (rect.strokeThickness > 0)
@@ -36,9 +41,76 @@ tombrush.CommonShapes = (function() {
   return CommonShapes;
 })();
 
+tombrush.GameObject = (function(){
+  function GameObject(width, height) {    
+    this.width = width || 0;
+    this.height = height || 0;
+    this.projectedX = 0;
+    this.projectedY = 0;    
+  };
+  var p = GameObject.prototype = new createjs.Container();
+
+  // rectangle bounding box collision checking
+  p.hitGameObject = function(gameObj) {
+    if (this.x > gameObj.x + gameObj.width
+     || this.x + this.width < gameObj.x
+     || this.y > gameObj.y + gameObj.height
+     || this.y + this.height < gameObj.y)
+      return false;
+    return true;
+  };
+
+  p.willHitGameObject = function(gameObj) {
+    if (this.projectedX > gameObj.projectedX + gameObj.width
+     || this.projectedX + this.width < gameObj.projectedX
+     || this.projectedY > gameObj.projectedY + gameObj.height
+     || this.projectedY + this.height < gameObj.projectedY)
+      return false;
+    return true;
+  };
+
+  // TODO: there are two types of platform, 
+  //       platform that can be jumped through from bottom and
+  //       platform that cannot be jumped through from bottom.
+  //       this hitPlatform method handles platform that can be jumped through bottom.
+  // p.hitPlatform = function(gameObj) {
+    // if (this.)
+  // }
+
+  p.hitAnyGameObject = function() {
+    for (var i in tombrush.game.gameObjects) {      
+      var gameObj = tombrush.game.gameObjects[i];
+
+      // ignore this object itself
+      if (this.name === gameObj.name) continue;      
+
+      if(this.hitGameObject(gameObj)) {
+        return gameObj;
+      }
+    }
+    return undefined;
+  }
+
+  p.willHitAnyGameObject = function() {
+    for (var i in tombrush.game.gameObjects) {      
+      var gameObj = tombrush.game.gameObjects[i];
+
+      // ignore this object itself
+      if (this.name === gameObj.name) continue;      
+
+      if(this.willHitGameObject(gameObj)) {
+        return gameObj;
+      }
+    }
+    return undefined;
+  }
+
+  return GameObject;
+})();
+
 tombrush.Tile = (function(){  
   function Tile(number){       
-    this.initialize();
+    this.initialize();    
 
     this.number = number;
 
@@ -51,7 +123,7 @@ tombrush.Tile = (function(){
       fillColor: "#999",     
     });    
     this.addChild(shape); 
-  }  
+  };
   var p = Tile.prototype = new createjs.Container();
 
   return Tile;
@@ -61,17 +133,18 @@ tombrush.Hero = (function(){
   function Hero() {
     this.initialize();
   };
-  var p = Hero.prototype = new createjs.Container();
+  var p = Hero.prototype = new tombrush.GameObject();
 
   // Public properties
   p.dropSpeed = 1;
   p.velocity = new createjs.Point(0, 0);
   
   // super initialize
-  p.Container_initialize = p.initialize;
+  p.super_initialize = p.initialize;
   p.initialize = function() {
-    this.Container_initialize(); // super init
+    this.super_initialize();
 
+    this.name = 'hero';
     this.width = 10;
     this.height = 20;
 
@@ -84,11 +157,36 @@ tombrush.Hero = (function(){
 
     // Give heartbeat to Hero
     createjs.Ticker.addListener(this, /*pausable=*/ true);
-  }
+  };
 
-  p.tick = function(timeElapsed) {
+  p.tick = function(timeElapsed) {      
     this.velocity.y += this.dropSpeed;
-    this.y += this.velocity.y;
+    var maxVelocity = this.velocity.clone();
+    
+    if (this.velocity.y > 0) {
+      for (var i=1;i<=this.velocity.y;i++) {      
+        maxVelocity.y = i;
+        this.projectedY = this.y + maxVelocity.y;
+        var hit = this.willHitAnyGameObject();
+        if (hit !== undefined) {
+          maxVelocity.y -= 1; 
+          break;
+        }
+      }  
+    } else {
+      for (var i=-1;i>=this.velocity.y;i--) {
+        maxVelocity.y = i;
+        this.projectedY = this.y + maxVelocity.y;
+        console.log (this.projectedY);
+        var hit = this.willHitAnyGameObject();
+        if (hit !== undefined) { 
+          maxVelocity.y += 1
+          break;
+        }
+      }
+    }
+    
+    this.y += maxVelocity.y;
   };
 
   p.jump = function() {
@@ -102,12 +200,13 @@ tombrush.Platform = (function(){
   function Platform(){
     this.initialize();
   }
-  var p = Platform.prototype = new createjs.Container();
+  var p = Platform.prototype = new tombrush.GameObject();
 
-  p.Container_initialize = p.initialize;
+  p.super_initialize = p.initialize;
   p.initialize = function() {
-    this.Container_initialize(); // super init
+    this.super_initialize();
 
+    this.name = 'platform';
     this.width = 80;
     this.height = 10;
 
@@ -125,6 +224,15 @@ tombrush.Platform = (function(){
 tombrush.Game = (function() {    
   // constructor  
   function TombRushGame() {
+    this.initialize();      
+  }
+
+  var p = TombRushGame.prototype;
+
+  // public properties
+  p.gameObjects = [];
+
+  p.initialize = function() {
     console.log("Tomb Rush game starts.");
     
     this.canvas = document.getElementById('game-canvas');
@@ -139,22 +247,32 @@ tombrush.Game = (function() {
     createjs.Ticker.setFPS(40);
     createjs.Ticker.addListener(this, /*pausable=*/ true);
 
-    this.initGame();       
-  }  
-
-  var p = TombRushGame.prototype;
+    this.initGame(); 
+  }
 
   p.initGame = function() {
+    // TODO: should also remove child before reset gameObjects
+    p.gameObjects.length = 0; // reset array
+
 
     var platform = new tombrush.Platform();
-    platform.x = 50;
-    platform.y = 150;
+    platform.x = platform.projectedX = 50;
+    platform.y = platform.projectedY = 150;
     this.stage.addChild(platform);
+    this.gameObjects.push(platform);
+
+    var platform2 = new tombrush.Platform();
+    platform2.x = platform2.projectedX = 50;
+    platform2.y = platform2.projectedY = 70;
+    this.stage.addChild(platform2);
+    this.gameObjects.push(platform2);
     
     var hero = new tombrush.Hero();
-    hero.x = 100;
-    hero.y = 100;
+    hero.x = hero.projectedX = 100;
+    hero.y = hero.projectedY = 100;
     this.stage.addChild(hero);
+
+    this.gameObjects.push(hero);
 
     this.stage.onMouseUp = function() {      
       hero.jump();
@@ -167,7 +285,7 @@ tombrush.Game = (function() {
     this.updateView();
   }
 
-  p.updateView = function() {    
+  p.updateView = function() {
     this.stage.update();
   };
   
@@ -179,5 +297,5 @@ tombrush.Game = (function() {
 
 window.onload = function() {
   // entry point
-  var game = new tombrush.Game();
+  tombrush.game = new tombrush.Game();
 };
