@@ -52,19 +52,19 @@ tombrush.GameObject = (function(){
 
   // rectangle bounding box collision checking
   p.hitGameObject = function(gameObj) {
-    if (this.x > gameObj.x + gameObj.width
-     || this.x + this.width < gameObj.x
-     || this.y > gameObj.y + gameObj.height
-     || this.y + this.height < gameObj.y)
+    if (this.x >= gameObj.x + gameObj.width
+     || this.x + this.width <= gameObj.x
+     || this.y >= gameObj.y + gameObj.height
+     || this.y + this.height <= gameObj.y)
       return false;
     return true;
   };
 
   p.willHitGameObject = function(gameObj) {
-    if (this.projectedX > gameObj.projectedX + gameObj.width
-     || this.projectedX + this.width < gameObj.projectedX
-     || this.projectedY > gameObj.projectedY + gameObj.height
-     || this.projectedY + this.height < gameObj.projectedY)
+    if (this.projectedX >= gameObj.projectedX + gameObj.width
+     || this.projectedX + this.width <= gameObj.projectedX
+     || this.projectedY >= gameObj.projectedY + gameObj.height
+     || this.projectedY + this.height <= gameObj.projectedY)
       return false;
     return true;
   };
@@ -173,7 +173,7 @@ tombrush.Hero = (function(){
           break;
         }
       }  
-    } else {
+    }/* else {
       for (var i=-1;i>=this.velocity.y;i--) {
         maxVelocity.y = i;
         this.projectedY = this.y + maxVelocity.y;
@@ -184,9 +184,13 @@ tombrush.Hero = (function(){
           break;
         }
       }
-    }
+    }*/
     
+    console.log (maxVelocity.y);
     this.y += maxVelocity.y;
+
+    this.velocity.x = 3;
+    this.x += this.velocity.x;
   };
 
   p.jump = function() {
@@ -293,6 +297,49 @@ tombrush.Game = (function() {
   };
 
   return TombRushGame;
+})();
+
+var test = (function() {
+  var game = new tombrush.Game();
+  var platform = new tombrush.Platform();
+  platform.x = 10; 
+  platform.y = 10;
+  platform.width = 10;
+  platform.height = 10;
+  var platform2 = new tombrush.Platform();
+  platform2.x = 10; 
+  platform2.y = 10;
+  platform2.width = 10;
+  platform2.height = 10;
+  if (platform.hitGameObject(platform2) === true) {
+    console.log ('passed');
+  }else {
+    console.log ('FAILED');
+  }
+
+  platform2.x = 30;
+  platform2.y = 30;
+  if (platform.hitGameObject(platform2) === false) {
+    console.log ('passed');
+  }else{
+    console.log ('FAILED');
+  }
+
+  platform2.x = 10;
+  platform2.y = 30;
+  if (platform.hitGameObject(platform2) === false) {
+    console.log ('passed');
+  }else{
+    console.log ('FAILED');
+  }
+
+  platform2.x = 30;
+  platform2.y = 10;
+  if (platform.hitGameObject(platform2) === false) {
+    console.log ('passed');
+  }else{
+    console.log ('FAILED');
+  }
 })();
 
 window.onload = function() {
