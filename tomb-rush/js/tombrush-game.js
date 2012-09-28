@@ -170,27 +170,27 @@ tombrush.Hero = (function(){
         var hit = this.willHitAnyGameObject();
         if (hit !== undefined) {
           maxVelocity.y -= 1; 
+          this.velocity.y = maxVelocity.y;
           break;
         }
       }  
-    }/* else {
+    } else {
       for (var i=-1;i>=this.velocity.y;i--) {
         maxVelocity.y = i;
         this.projectedY = this.y + maxVelocity.y;
-        console.log (this.projectedY);
         var hit = this.willHitAnyGameObject();
         if (hit !== undefined) { 
           maxVelocity.y += 1
           break;
         }
       }
-    }*/
+    }
     
-    console.log (maxVelocity.y);
     this.y += maxVelocity.y;
 
     this.velocity.x = 3;
     this.x += this.velocity.x;
+    this.projectedX = this.x;
   };
 
   p.jump = function() {
@@ -255,8 +255,14 @@ tombrush.Game = (function() {
   }
 
   p.initGame = function() {
-    // TODO: should also remove child before reset gameObjects
-    p.gameObjects.length = 0; // reset array
+    // remove all game objects from stage
+    for (var i in this.gameObjects)
+    {      
+      var gameObj = this.gameObjects[i];
+      createjs.Ticker.removeListener(gameObj)
+      this.stage.removeChild(gameObj);
+    }    
+    this.gameObjects.length = 0; // reset array
 
 
     var platform = new tombrush.Platform();
@@ -266,13 +272,19 @@ tombrush.Game = (function() {
     this.gameObjects.push(platform);
 
     var platform2 = new tombrush.Platform();
-    platform2.x = platform2.projectedX = 50;
-    platform2.y = platform2.projectedY = 70;
+    platform2.x = platform2.projectedX = 170;
+    platform2.y = platform2.projectedY = 130;
     this.stage.addChild(platform2);
     this.gameObjects.push(platform2);
+
+    var platform3 = new tombrush.Platform();
+    platform3.x = platform3.projectedX = 300;
+    platform3.y = platform3.projectedY = 180;
+    this.stage.addChild(platform3);
+    this.gameObjects.push(platform3);
     
-    var hero = new tombrush.Hero();
-    hero.x = hero.projectedX = 100;
+    var hero = this.hero = new tombrush.Hero();
+    hero.x = hero.projectedX = 50;
     hero.y = hero.projectedY = 100;
     this.stage.addChild(hero);
 
@@ -286,7 +298,16 @@ tombrush.Game = (function() {
   };
 
   p.tick = function() {
+    // game over checking
+    if (this.hero.y > this.canvas.height)
+    {
+      this.initGame();
+    }
     this.updateView();
+
+    // TODO: move the DOM finding method out of the tick loop
+    var div = document.getElementById('fps');
+    div.innerHTML = Math.round(createjs.Ticker.getMeasuredFPS());
   }
 
   p.updateView = function() {
