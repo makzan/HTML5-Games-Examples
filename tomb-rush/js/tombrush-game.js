@@ -46,7 +46,11 @@ tombrush.GameObject = (function(){
     this.width = width || 0;
     this.height = height || 0;
     this.projectedX = 0;
-    this.projectedY = 0;    
+    this.projectedY = 0;
+    
+    // collision status
+    this.touching = 0x0000; // four bits for top, right, bottom, left collision. Learn from Flixel source code.
+//    this.wasTouching = 0x0000;
   };
   var p = GameObject.prototype = new createjs.Container();
 
@@ -59,6 +63,23 @@ tombrush.GameObject = (function(){
       return false;
     return true;
   };
+  
+  // TODO: this method should detect which side the game object hits the other object.
+  p.hitGameObjectOnSide = function(gameObj) {
+    if (!this.hitGameObj(gameObj)) return undefined;
+    
+    // must hit somewhere after this line.
+    this.touching = 0x0000; // reset first
+    
+    // top    
+    if (this.y <= gameObj.y + gameObj.height && this.y + this.height > gameObj.y) {
+      this.touching += 0x1000;
+     // gameObj.touching
+    }
+    
+    // bottom
+//    if (this.y < gameObj.y + gameObj.height && this.y + this.height > gameObj.y)
+  }  
 
   p.willHitGameObject = function(gameObj) {
     if (this.projectedX >= gameObj.projectedX + gameObj.width
@@ -158,11 +179,24 @@ tombrush.Hero = (function(){
     // Give heartbeat to Hero
     createjs.Ticker.addListener(this, /*pausable=*/ true);
   };
+  
+  
 
   p.tick = function(timeElapsed) {      
     this.velocity.y += this.dropSpeed;
+    this.velocity.x = 3;
+        
+    var maxVelocity = this.maxVelocityUntilHit();
+                
+    this.y += maxVelocity.y;
+    this.x += maxVelocity.x;
+    
+  };
+
+  p.maxVelocityUntilHit = function () {
     var maxVelocity = this.velocity.clone();
     
+    // Y axis
     if (this.velocity.y > 0) {
       for (var i=1;i<=this.velocity.y;i++) {      
         maxVelocity.y = i;
@@ -180,18 +214,40 @@ tombrush.Hero = (function(){
         this.projectedY = this.y + maxVelocity.y;
         var hit = this.willHitAnyGameObject();
         if (hit !== undefined) { 
-          maxVelocity.y += 1
+          maxVelocity.y += 1;
+          this.velocity.y = maxVelocity.y;
           break;
         }
       }
     }
     
-    this.y += maxVelocity.y;
-
-    this.velocity.x = 3;
-    this.x += this.velocity.x;
-    this.projectedX = this.x;
-  };
+    // X axis
+    if (this.velocity.x > 0) {
+      for (var i=1;i<=this.velocity.x; i++) {
+        maxVelocity.x = i;
+        this.projectedX = this.x + maxVelocity.x;
+        var hit = this.willHitAnyGameObject();
+        if (hit !== undefined) {
+          maxVelocity.x -= 1;
+          this.velocity.x = maxVelocity.x;
+          break;
+        }
+      }
+    } else {
+      for (var i=-1;i>=this.velocity.x;i--) {
+        maxVelocity.y = i;
+        this.projectedX = this.x + maxVelocity.x;
+        var hit = this.willHitAnyGameObject();
+        if (this !== undefined) {
+          maxVelocity.x += 1;
+          this.velocity.x = maxVelocity.x;
+          break;
+        }
+      }
+    }
+    
+    return maxVelocity;
+  }
 
   p.jump = function() {
     this.velocity.y = -10;
@@ -264,7 +320,7 @@ tombrush.Game = (function() {
     }    
     this.gameObjects.length = 0; // reset array
 
-
+    // TODO: make the platform creation much more easier please.
     var platform = new tombrush.Platform();
     platform.x = platform.projectedX = 50;
     platform.y = platform.projectedY = 150;
