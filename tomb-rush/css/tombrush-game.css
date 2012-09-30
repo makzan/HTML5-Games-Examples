@@ -39,25 +39,4 @@ canvas {
   background: rgba(0,0,0,.8);
 }
 
-#next-tile {
-  font-size: 1.2em;
-}
 
-#gameover-win {
-  position: absolute;
-  top: -320px;
-  left: 0;
-  width: 480px;
-  height: 270px;
-  background: white;
-  text-align: center;
-  padding-top: 50px;
-  font-size: 2em;
-}
-
-#gameover-win.gameover-appear {
-  top: 0;
-  -webkit-transition: top .3s ease-out;
-  -moz-transition: top .3s ease-out;
-  transition: top .3s ease-out;
-}
