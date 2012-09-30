@@ -146,3 +146,18 @@ gameUtils.GameObject = (function(){
 
   return GameObject;
 })();
+
+// Camera is basically a sprite that we put game objects inside it, then we offset this big sprite to simulate camera.
+gameUtils.Camera = (function(){
+  function Camera() { 
+    this.initialize();
+  };
+  var p = Camera.prototype = new createjs.Container();
+  p.super_initialize = p.initialize;
+  p.initialize = function() {
+    this.super_initialize();    
+  }
+
+  return Camera;
+})();
+

@@ -105,6 +105,21 @@ tombrush.Hero = (function(){
     this.x += maxVelocity.x;    
 
     this.onGround = (maxVelocity.y === 0);
+
+    // check if hit obstacle.  
+    var hitObstacle = false;  
+    for (var i in tombrush.game.gameObjects) {      
+      var gameObj = tombrush.game.gameObjects[i];
+
+      // ignore this object itself
+      if (this.name === gameObj.name) continue;   
+
+      var delta = this.hitGameObject(gameObj);
+      if(delta != null) {
+        delta.gameObj = gameObj;
+        return delta;
+      }
+    }      
     
   };
 
@@ -114,6 +129,27 @@ tombrush.Hero = (function(){
   };
 
   return Hero;
+})();
+
+tombrush.Obstacle = (function(){
+  function Obstacle() {
+    this.initialize();    
+  }
+  var p = Obstacle.prototype = new gameUtils.GameObject();
+
+  p.super_initialize = p.initialize;
+  p.initialize = function() {
+    this.super_initialize();
+    this.name = 'obstacle';
+    this.width = 20;
+    this.height = 20;
+
+    var shape = tombrush.CommonShapes.rectangle({
+      width: this.width,
+      height: this.height,      
+    });
+    this.addChild(shape);
+  }
 })();
 
 tombrush.Platform = (function(){
@@ -159,7 +195,12 @@ tombrush.Game = (function() {
     
     // EaselJS Stage
     this.stage = new createjs.Stage(this.canvas);
-    
+
+    // Camera
+    // TODO IMPROVE: we may use array to store a list of cameras later.
+    this.camera = new gameUtils.Camera();
+    this.stage.addChild(this.camera);
+
     // Enabling the Touches on mobile device
     createjs.Touch.enable(this.stage, /*singleTouch=*/ true, /*allowDefault=*/false);
 
@@ -180,29 +221,48 @@ tombrush.Game = (function() {
     }    
     this.gameObjects.length = 0; // reset array
 
+    // reset camera
+    this.camera.x = this.camera.y = 0;
+
     // TODO: make the platform creation much more easier please.
-    var platform = new tombrush.Platform();
-    platform.x = platform.projectedX = 50;
-    platform.y = platform.projectedY = 150;
-    this.stage.addChild(platform);
-    this.gameObjects.push(platform);
+    for (var i=0;i<10;i++)
+    {
+      var offsetX = i * 570;
+      var platform = new tombrush.Platform();
+      platform.x = platform.projectedX = 50 + offsetX;
+      platform.y = platform.projectedY = 150;  
+      this.camera.addChild(platform);
+      this.gameObjects.push(platform);
 
-    var platform2 = new tombrush.Platform();
-    platform2.x = platform2.projectedX = 170;
-    platform2.y = platform2.projectedY = 130;
-    this.stage.addChild(platform2);
-    this.gameObjects.push(platform2);
+      var platform2 = new tombrush.Platform();
+      platform2.x = platform2.projectedX = 170 + offsetX;
+      platform2.y = platform2.projectedY = 130;
+      this.camera.addChild(platform2);
+      this.gameObjects.push(platform2);
 
-    var platform3 = new tombrush.Platform();
-    platform3.x = platform3.projectedX = 300;
-    platform3.y = platform3.projectedY = 180;
-    this.stage.addChild(platform3);
-    this.gameObjects.push(platform3);
+      var platform3 = new tombrush.Platform();
+      platform3.x = platform3.projectedX = 300 + offsetX;
+      platform3.y = platform3.projectedY = 180;
+      this.camera.addChild(platform3);
+      this.gameObjects.push(platform3);
+
+      platform = new tombrush.Platform();
+      platform.x = platform.projectedX = 400 + offsetX;
+      platform.y = platform.projectedY = 140;
+      this.camera.addChild(platform);
+      this.gameObjects.push(platform);
+
+      platform = new tombrush.Platform();
+      platform.x = platform.projectedX = 530 + offsetX;
+      platform.y = platform.projectedY = 180;
+      this.camera.addChild(platform);
+      this.gameObjects.push(platform);
+    }    
     
     var hero = this.hero = new tombrush.Hero();
     hero.x = hero.projectedX = 50;
     hero.y = hero.projectedY = 100;
-    this.stage.addChild(hero);
+    this.camera.addChild(hero);
 
     this.gameObjects.push(hero);
 
@@ -217,9 +277,12 @@ tombrush.Game = (function() {
     // game over checking
     if (this.hero.y > this.canvas.height)
     {
-      this.initGame();
+      this.gameOver();
     }
     this.updateView();
+
+    // TODO: just an experiment code. remove it later.
+    this.camera.x -= 3;
 
     // TODO: move the DOM finding method out of the tick loop
     var div = document.getElementById('fps');
@@ -231,6 +294,7 @@ tombrush.Game = (function() {
   };
   
   p.gameOver = function() {
+    this.initGame();
   };
 
   return TombRushGame;
