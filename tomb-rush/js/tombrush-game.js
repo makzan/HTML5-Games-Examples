@@ -217,7 +217,7 @@ tombrush.Game = (function() {
     {      
       var gameObj = this.gameObjects[i];
       createjs.Ticker.removeListener(gameObj)
-      this.stage.removeChild(gameObj);
+      this.camera.removeChild(gameObj);
     }    
     this.gameObjects.length = 0; // reset array
 
