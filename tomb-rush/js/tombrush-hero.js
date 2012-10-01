@@ -17,7 +17,7 @@ tombrush.Hero = (function(){
 
     this.name = 'hero';
     this.width = 10;
-    this.height = 20;
+    this.height = 16;
 
     var shape = tombrush.CommonShapes.rectangle({
       width: this.width,
@@ -61,7 +61,7 @@ tombrush.Hero = (function(){
   };
 
   p.jump = function() {
-    if (this.onGround)
+    // if (this.onGround)
       this.velocity.y = -10;
   };
 

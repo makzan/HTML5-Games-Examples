@@ -54,6 +54,7 @@ function QuadTree(bounds, pointQuad, maxDepth, maxChildren)
   }
   else
   {
+    console.log ('new quad tree with bounds: bounds:', bounds, 'max depth:', maxDepth, 'max children:', maxChildren);
     node = new BoundsNode(bounds, 0, maxDepth, maxChildren);
   }
   
@@ -151,7 +152,7 @@ Node.prototype._bounds = null;
 //read only
 Node.prototype._depth = 0;
 
-Node.prototype._maxChildren = 4;
+Node.prototype._maxChildren = 2;
 Node.prototype._maxDepth = 4;
 
 Node.TOP_LEFT = 0;
@@ -173,7 +174,7 @@ Node.prototype.insert = function(item)
 
   this.children.push(item);
 
-  var len = this.children.length;
+  var len = this.children.length;  
   if(!(this._depth >= this._maxDepth) && 
     len > this._maxChildren)
   {
@@ -344,7 +345,7 @@ BoundsNode.prototype.insert = function(item)
   this.children.push(item);
 
   var len = this.children.length;
-  
+  // console.log('depth:',this._depth,'max:', this._maxDepth);
   if(!(this._depth >= this._maxDepth) && 
     len > this._maxChildren)
   {
@@ -370,9 +371,34 @@ BoundsNode.prototype.retrieve = function(item)
   out.length = 0;
   if(this.nodes.length)
   {
-    var index = this._findIndex(item);
-    
-    out.push.apply(out, this.nodes[index].retrieve(item));
+    // makzan: we need to handle when the item is a bound instead of a point.
+    var itemA = {
+      x: item.x,
+      y: item.y
+    }
+    var indexA = this._findIndex(itemA);    
+    out.push.apply(out, this.nodes[indexA].retrieve(item));
+
+    var itemB = {
+      x: item.x + item.width,
+      y: item.y
+    }
+    var indexB = this._findIndex(itemB);    
+    out.push.apply(out, this.nodes[indexB].retrieve(item));
+
+    var itemC = {
+      x: item.x,
+      y: item.y + item.height
+    }
+    var indexC = this._findIndex(itemC);    
+    out.push.apply(out, this.nodes[indexC].retrieve(item));
+
+    var itemD = {
+      x: item.x + item.width,
+      y: item.y + item.height
+    }
+    var indexD = this._findIndex(itemD);    
+    out.push.apply(out, this.nodes[indexD].retrieve(item));
   }
   
   out.push.apply(out, this._stuckChildren);
@@ -380,6 +406,41 @@ BoundsNode.prototype.retrieve = function(item)
   
   return out;
 }
+
+/*BoundsNode.prototype._findIndex = function(item)
+{
+  var b = this._bounds;
+  var left = (item.x > b.x + b.width / 2)? false : true;
+  var top = (item.y > b.y + b.height / 2)? false : true;
+  
+  //top left
+  var index = Node.TOP_LEFT;
+  if(left)
+  {
+    //left side
+    if(!top)
+    {
+      //bottom left
+      index = Node.BOTTOM_LEFT;
+    }
+  }
+  else
+  {
+    //right side
+    if(top)
+    {
+      //top right
+      index = Node.TOP_RIGHT;
+    }
+    else
+    {
+      //bottom right
+      index = Node.BOTTOM_RIGHT;
+    }
+  }
+  
+  return index;
+}*/
 
 BoundsNode.prototype.clear = function()
 {

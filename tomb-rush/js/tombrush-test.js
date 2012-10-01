@@ -1,4 +1,4 @@
-var tombrush = tombrush || {};
+/*var tombrush = tombrush || {};
 var test = (function() {
   var game = new tombrush.Game();
   var platform = new tombrush.Platform();
@@ -40,4 +40,4 @@ var test = (function() {
   }else{
     console.log ('FAILED');
   }
-})();
+})();*/

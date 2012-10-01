@@ -21,13 +21,13 @@ tombrush.Game = (function() {
     // World dimension
     this.world= {};
     this.world.size = {
-      width: 10000,
+      width: 2024,
       height: 320
     };
 
     // Quad Tree
     quadTreeBounds = new createjs.Rectangle(0, 0, this.world.size.width, this.world.size.height);
-    this.quadTree = new QuadTree(quadTreeBounds, /*pointQuad=*/ false /*false means using bound*/, /*maxDepth=*/ 4, /*maxChildren=*/ 2);
+    this.quadTree = new QuadTree(quadTreeBounds);
 
     // Camera
     // TODO IMPROVE: we may use array to store a list of cameras later.
@@ -62,7 +62,17 @@ tombrush.Game = (function() {
     this.camera.x = this.camera.y = 0;
 
     // TODO: make the platform creation much more easier please.
-    for (var i=0;i<100;i++)
+    /*for (var i=0;i<10;i++) {
+      var x = Math.random() * 1024;
+      var y = Math.random() * 320;
+      var platform = new tombrush.Platform();
+      platform.x = x;
+      platform.y = y;
+      this.camera.addChild(platform);
+      this.gameObjects.push(platform);
+    }*/
+
+    for (var i=0;i<20;i++)
     {
       var offsetX = i * 570;
       var platform = new tombrush.Platform();
@@ -124,6 +134,9 @@ tombrush.Game = (function() {
       this.gameObjects[i].alpha = 1;
     }
     debug.watch(items.length);
+    if (items.length < 10) {
+      console.log (items);
+    }
     for (var i in items) {
       items[i].alpha = 0.5;
     }

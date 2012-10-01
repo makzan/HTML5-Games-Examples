@@ -20,7 +20,7 @@ canvas {
 }
 
 #game {
-  width: 480px;
+  width: 1024px;
   height: 320px;
   border: 1px solid black;
   box-shadow: 0 0 0 3px gray;

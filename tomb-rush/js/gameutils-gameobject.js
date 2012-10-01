@@ -107,6 +107,8 @@ gameUtils.GameObject = (function(){
 
   p.willHitAnyGameObject = function() {
     // fetch the objects list from quad tree
+    tombrush.game.quadTree.clear();
+    tombrush.game.quadTree.insert(tombrush.game.gameObjects);
     var items = tombrush.game.quadTree.retrieve(this);
 
     for (var i in items) {      
