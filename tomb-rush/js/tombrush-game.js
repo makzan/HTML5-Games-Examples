@@ -18,10 +18,25 @@ tombrush.Game = (function() {
     // EaselJS Stage
     this.stage = new createjs.Stage(this.canvas);
 
+    // World dimension
+    this.world= {};
+    this.world.size = {
+      width: 10000,
+      height: 320
+    };
+
+    // Quad Tree
+    quadTreeBounds = new createjs.Rectangle(0, 0, this.world.size.width, this.world.size.height);
+    this.quadTree = new QuadTree(quadTreeBounds, /*pointQuad=*/ false /*false means using bound*/, /*maxDepth=*/ 4, /*maxChildren=*/ 2);
+
     // Camera
     // TODO IMPROVE: we may use array to store a list of cameras later.
     this.camera = new gameUtils.Camera();
     this.stage.addChild(this.camera);
+    this.camera.setZoom(1);
+
+    window.quadDebug = new createjs.Shape();
+    this.camera.addChild(window.quadDebug);
 
     // Enabling the Touches on mobile device
     createjs.Touch.enable(this.stage, /*singleTouch=*/ true, /*allowDefault=*/false);
@@ -47,12 +62,12 @@ tombrush.Game = (function() {
     this.camera.x = this.camera.y = 0;
 
     // TODO: make the platform creation much more easier please.
-    for (var i=0;i<1000;i++)
+    for (var i=0;i<100;i++)
     {
       var offsetX = i * 570;
       var platform = new tombrush.Platform();
       platform.x = platform.projectedX = 50 + offsetX;
-      platform.y = platform.projectedY = 150;  
+      platform.y = platform.projectedY = 143;  
       this.camera.addChild(platform);
       this.gameObjects.push(platform);
 
@@ -68,17 +83,17 @@ tombrush.Game = (function() {
       this.camera.addChild(platform3);
       this.gameObjects.push(platform3);
 
-      platform = new tombrush.Platform();
-      platform.x = platform.projectedX = 400 + offsetX;
-      platform.y = platform.projectedY = 140;
-      this.camera.addChild(platform);
-      this.gameObjects.push(platform);
+      var platform4 = new tombrush.Platform();
+      platform4.x = platform4.projectedX = 400 + offsetX;
+      platform4.y = platform4.projectedY = 140;
+      this.camera.addChild(platform4);
+      this.gameObjects.push(platform4);
 
-      platform = new tombrush.Platform();
-      platform.x = platform.projectedX = 530 + offsetX;
-      platform.y = platform.projectedY = 180;
-      this.camera.addChild(platform);
-      this.gameObjects.push(platform);
+      var platform5 = new tombrush.Platform();
+      platform5.x = platform5.projectedX = 530 + offsetX;
+      platform5.y = platform5.projectedY = 180;
+      this.camera.addChild(platform5);
+      this.gameObjects.push(platform5);
     }    
     
     var hero = this.hero = new tombrush.Hero();
@@ -96,6 +111,23 @@ tombrush.Game = (function() {
   };
 
   p.tick = function() {
+    // update quadtree
+    this.quadTree.clear();
+    this.quadTree.insert(this.gameObjects);    
+
+    renderQuad();
+
+    // quadtree testing code
+    var items = this.quadTree.retrieve(this.hero);
+    // console.log ('items: ', items);
+    for (var i in this.gameObjects) {
+      this.gameObjects[i].alpha = 1;
+    }
+    debug.watch(items.length);
+    for (var i in items) {
+      items[i].alpha = 0.5;
+    }
+    
     // game over checking
     if (this.hero.y > this.canvas.height)
     {
@@ -104,7 +136,7 @@ tombrush.Game = (function() {
     this.updateView();
 
     // TODO: just an experiment code. remove it later.
-    this.camera.x -= 3;
+    this.camera.x -= 3 * this.camera.zoom;
 
     // TODO: move the DOM finding method out of the tick loop
     var div = document.getElementById('fps');
@@ -122,3 +154,34 @@ tombrush.Game = (function() {
   return TombRushGame;
 })();
 
+
+function renderQuad()
+{
+  var g = window.quadDebug.graphics;
+  g.clear();
+  g.setStrokeStyle(1);
+  g.beginStroke("#ff0000");
+  
+  drawNode(tombrush.game.quadTree.root);
+}
+
+function drawNode(node)
+{
+  var bounds = node._bounds;
+  var g = window.quadDebug.graphics;
+
+  g.drawRect(
+      Math.abs(bounds.x)  + 0.5,
+      Math.abs(bounds.y) + 0.5,
+      bounds.width,
+      bounds.height
+    );
+  
+  var len = node.nodes.length;
+  
+  for(var i = 0; i < len; i++)
+  {
+    drawNode(node.nodes[i]);
+  }
+  
+}

@@ -10,7 +10,7 @@ tombrush.Platform = (function(){
 
     this.name = 'platform';
     this.width = 80;
-    this.height = 10;
+    this.height = 20;
 
     var shape = tombrush.CommonShapes.rectangle({
       width: this.width,

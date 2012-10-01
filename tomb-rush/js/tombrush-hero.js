@@ -44,7 +44,7 @@ tombrush.Hero = (function(){
     this.onGround = (maxVelocity.y === 0);
 
     // check if hit obstacle.  
-    var hitObstacle = false;  
+    /*var hitObstacle = false;  
     for (var i in tombrush.game.gameObjects) {      
       var gameObj = tombrush.game.gameObjects[i];
 
@@ -56,7 +56,7 @@ tombrush.Hero = (function(){
         delta.gameObj = gameObj;
         return delta;
       }
-    }      
+    } */     
     
   };
 

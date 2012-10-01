@@ -3,6 +3,10 @@ debug.log = function (message) {
   document.getElementById('debug-output').innerHTML += message + '<br>';
 }
 
+debug.watch = function(message) {
+ document.getElementById('debug-output').innerHTML = message; 
+}
+
 // window/global scope
 var tombrush = tombrush || {};
 
