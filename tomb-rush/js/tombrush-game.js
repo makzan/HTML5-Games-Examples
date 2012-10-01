@@ -225,7 +225,7 @@ tombrush.Game = (function() {
     this.camera.x = this.camera.y = 0;
 
     // TODO: make the platform creation much more easier please.
-    for (var i=0;i<10;i++)
+    for (var i=0;i<1000;i++)
     {
       var offsetX = i * 570;
       var platform = new tombrush.Platform();
