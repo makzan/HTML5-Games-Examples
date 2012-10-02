@@ -107,9 +107,11 @@ gameUtils.GameObject = (function(){
 
   p.willHitAnyGameObject = function() {
     // fetch the objects list from quad tree
-    tombrush.game.quadTree.clear();
-    tombrush.game.quadTree.insert(tombrush.game.gameObjects);
+    // tombrush.game.quadTree.clear();
+    // tombrush.game.quadTree.insert(tombrush.game.gameObjects);
     var items = tombrush.game.quadTree.retrieve(this);
+
+    var detected = [];    
 
     for (var i in items) {      
       var gameObj = items[i];
@@ -117,11 +119,20 @@ gameUtils.GameObject = (function(){
       // ignore this object itself
       if (this.name === gameObj.name) continue;      
 
+      // ignroe repeated game obj
+      for (var j in detected) {
+        if (detected[j] === gameObj){
+          // console.log ('repeated');
+          continue;
+        }
+      }
+
       var delta = this.willHitGameObject(gameObj)
       if(delta != null) {
         delta.gameObj = gameObj;
         return delta;
       }
+      detected.push(gameObj);
     }
     return null;
   }

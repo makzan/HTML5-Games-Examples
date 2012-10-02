@@ -21,7 +21,7 @@ tombrush.Game = (function() {
     // World dimension
     this.world= {};
     this.world.size = {
-      width: 2024,
+      width: 6000,
       height: 320
     };
 
@@ -72,7 +72,7 @@ tombrush.Game = (function() {
       this.gameObjects.push(platform);
     }*/
 
-    for (var i=0;i<20;i++)
+    for (var i=0;i<10;i++)
     {
       var offsetX = i * 570;
       var platform = new tombrush.Platform();
@@ -125,7 +125,7 @@ tombrush.Game = (function() {
     this.quadTree.clear();
     this.quadTree.insert(this.gameObjects);    
 
-    renderQuad();
+    // renderQuad();
 
     // quadtree testing code
     var items = this.quadTree.retrieve(this.hero);
@@ -134,9 +134,7 @@ tombrush.Game = (function() {
       this.gameObjects[i].alpha = 1;
     }
     debug.watch(items.length);
-    if (items.length < 10) {
-      console.log (items);
-    }
+    
     for (var i in items) {
       items[i].alpha = 0.5;
     }

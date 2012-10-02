@@ -152,7 +152,7 @@ Node.prototype._bounds = null;
 //read only
 Node.prototype._depth = 0;
 
-Node.prototype._maxChildren = 2;
+Node.prototype._maxChildren = 4;
 Node.prototype._maxDepth = 4;
 
 Node.TOP_LEFT = 0;
