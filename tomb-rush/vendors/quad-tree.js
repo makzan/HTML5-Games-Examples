@@ -54,7 +54,7 @@ function QuadTree(bounds, pointQuad, maxDepth, maxChildren)
   }
   else
   {
-    console.log ('new quad tree with bounds: bounds:', bounds, 'max depth:', maxDepth, 'max children:', maxChildren);
+    // console.log ('new quad tree with bounds: bounds:', bounds, 'max depth:', maxDepth, 'max children:', maxChildren);
     node = new BoundsNode(bounds, 0, maxDepth, maxChildren);
   }
   
@@ -83,11 +83,24 @@ QuadTree.prototype.insert = function(item)
     
     for(var i = 0; i < len; i++)
     {
+      // makzan: ignore out of world bounds item
+      if ((item[i].x > this.root._bounds.x + this.root._bounds.width) || 
+      (item[i].x + item[i].width < this.root._bounds.x) ||
+      (item[i].y > this.root._bounds.y + this.root._bounds.height) ||
+      (item[i].y + item[i].height < this.root._bounds.y))
+        continue;
+
       this.root.insert(item[i]);
     }
   }
   else
   {
+    // makzan: ignore out of world bounds item
+      if ((item.x > this.root._bounds.x + this.root._bounds.width) || 
+      (item.x + item.width < this.root._bounds.x) ||
+      (item.y > this.root._bounds.y + this.root._bounds.height) ||
+      (item.y + item.height < this.root._bounds.y))
+        return;
     this.root.insert(item);
   }
 }

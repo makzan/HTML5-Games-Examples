@@ -19,14 +19,20 @@ tombrush.Game = (function() {
     this.stage = new createjs.Stage(this.canvas);
 
     // World dimension
-    this.world= {};
-    this.world.size = {
-      width: 6000,
+    // game objects beyond the collisionWorld dimension will not have collision detecting.
+    this.collisionWorld= {};    
+    this.collisionWorld.origin = {
+      x: 0,
+      y: 0
+    }
+    this.collisionWorld.size = {
+      width: 600,
       height: 320
     };
 
     // Quad Tree
-    quadTreeBounds = new createjs.Rectangle(0, 0, this.world.size.width, this.world.size.height);
+    // TODO update the x,y to use collisionWorld origin.
+    quadTreeBounds = new createjs.Rectangle(0, 0, this.collisionWorld.size.width, this.collisionWorld.size.height);
     this.quadTree = new QuadTree(quadTreeBounds);
 
     // Camera
@@ -72,7 +78,7 @@ tombrush.Game = (function() {
       this.gameObjects.push(platform);
     }*/
 
-    for (var i=0;i<10;i++)
+    for (var i=0;i<100;i++)
     {
       var offsetX = i * 570;
       var platform = new tombrush.Platform();
@@ -122,10 +128,13 @@ tombrush.Game = (function() {
 
   p.tick = function() {
     // update quadtree
-    this.quadTree.clear();
+    // Quad Tree
+    // TODO update the x,y to use collisionWorld origin.
+    quadTreeBounds = new createjs.Rectangle(this.hero.x - 10, 0, this.collisionWorld.size.width, this.collisionWorld.size.height);
+    this.quadTree = new QuadTree(quadTreeBounds);
     this.quadTree.insert(this.gameObjects);    
 
-    // renderQuad();
+    renderQuad();
 
     // quadtree testing code
     var items = this.quadTree.retrieve(this.hero);
