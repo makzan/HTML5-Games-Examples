@@ -26,7 +26,7 @@ tombrush.Game = (function() {
       y: 0
     }
     this.collisionWorld.size = {
-      width: 600,
+      width: 960,
       height: 320
     };
 
@@ -130,7 +130,7 @@ tombrush.Game = (function() {
     // update quadtree
     // Quad Tree
     // TODO update the x,y to use collisionWorld origin.
-    quadTreeBounds = new createjs.Rectangle(this.hero.x - 10, 0, this.collisionWorld.size.width, this.collisionWorld.size.height);
+    quadTreeBounds = new createjs.Rectangle(this.hero.x - 20, 0, this.collisionWorld.size.width, this.collisionWorld.size.height);
     this.quadTree = new QuadTree(quadTreeBounds);
     this.quadTree.insert(this.gameObjects);    
 
