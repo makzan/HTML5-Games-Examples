@@ -1,6 +1,6 @@
 # Box2D Car Game
 
-This game integrates Box2D into canvas.
+This game integrates Box2D 1.2 into canvas.
 
 This example is originally from the book [HTML5 Games Development by Examples][1].
 
