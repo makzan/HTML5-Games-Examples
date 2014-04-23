@@ -18,15 +18,17 @@ Originally designed from my book [HTML5 Games Development by Examples: Beginner'
 
 ### Count99
 
-![image](http://makzan.github.com/HTML5-Games-Examples/images/count99-screen.png)
+![Count 99 screen](http://makzan.github.com/HTML5-Games-Examples/images/count99-screen.png)
 
 ### Memory matching game with CSS3
 
-![image](http://makzan.github.com/HTML5-Games-Examples/images/css-matching-screen.png)
+![Memory matching game screen](http://makzan.github.com/HTML5-Games-Examples/images/css-matching-screen.png)
 
 Originally designed from my book [HTML5 Games Development by Examples: Beginner's guide](http://makzan.net/works/book-html5-games-dev-by-examples/) and you can [play this game here](http://42games.net/css3memory/).
 
 ### Multiply Defense game with EaselJS
+
+![Multiple-Defense game screen](https://raw.githubusercontent.com/makzan/HTML5-Games-Examples/gh-pages/images/multiple-deferse.png)
 
 ### Ping Pong game with jQuery
 
