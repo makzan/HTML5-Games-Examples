@@ -28,13 +28,15 @@ Originally designed from my book [HTML5 Games Development by Examples: Beginner'
 
 ### Multiply Defense game with EaselJS
 
-![Multiple-Defense game screen](https://raw.githubusercontent.com/makzan/HTML5-Games-Examples/gh-pages/images/multiple-deferse.png)
+![Multiple-Defense game screen](http://makzan.github.io/HTML5-Games-Examples/images/multiple-deferse.png)
 
 ### Ping Pong game with jQuery
 
 ### Untagle game with Canvas
 
 Originally designed from my book [HTML5 Games Development by Examples: Beginner's guide](http://makzan.net/works/book-html5-games-dev-by-examples/) and you can [play this game here](http://42games.net/html5/untangle/).
+
+![Untangle game screen](http://makzan.github.io/HTML5-Games-Examples/images/untangle-screen.png)
 
 ## License
 
