@@ -107,8 +107,8 @@ c99.Game = (function() {
 
     // the onPress event handler for tile
     var tileOnPress = function(event) {
-      if (event.target.number === this.nextCount) {
-        this.stage.removeChild(event.target);
+      if (event.currentTarget.number === this.nextCount) {
+        this.stage.removeChild(event.currentTarget);
 
         // count the next tile.
         this.nextCount++;
@@ -130,7 +130,7 @@ c99.Game = (function() {
       var tile = new c99.Tile(i);
       tile.x = Math.random()*(this.canvas.width-tile.width);
       tile.y = Math.random()*(this.canvas.height-tile.height);
-      tile.onPress = (tileOnPress).bind(this); // bind the outer 'this' scope into the event handler function.
+      tile.on('mousedown', (tileOnPress).bind(this)); // bind the outer 'this' scope into the event handler function.
       this.stage.addChild(tile);
     }
 
