@@ -3,7 +3,8 @@
 <head>
   <meta charset='utf-8'>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Count 99 Game</title>  
+  <title>Count 99 Game</title>
+  <link rel="stylesheet" href="css/pf_tempesta_seven_compressed_bold-webfont.css" />
   <link rel="stylesheet" href="css/count99-game.css">
 </head>
 <body>
@@ -11,12 +12,10 @@
   <div id='game'>
     <canvas id='game-canvas' width='480' height='320'></canvas>
     <div id='hud'>
-      next tile: <span id='next-tile'>1</span>
+      <span id='next-count'>loading</span>
     </div>
-    <div id='gameover-win'>
-      <p>Congratulations!</p>
-      <p>You Won!</p>
-      <p><a href='#' id='restart-button'>Restart Game</a></p>
+    <div id='gameover'>
+      <p><a href='#' id='restart-button'></a></p>
     </div>
   </div>
 
