@@ -22,7 +22,7 @@ rush.Hero = (function(){
     // copy from zoe exported running.json file.
     var spritesheetData = {"images": ["images/running.png"], "frames": [[0, 0, 16, 16, 0, 0, 0], [16, 0, 16, 16, 0, 0, 0], [32, 0, 16, 16, 0, 0, 0], [48, 0, 16, 16, 0, 0, 0]], "animations": {"all": {"frames": [0, 1, 2, 3], frequency:4}}}
     var spritesheet = new createjs.SpriteSheet(spritesheetData);
-    this.animation = new createjs.BitmapAnimation(spritesheet);
+    this.animation = new createjs.Sprite(spritesheet);
     this.animation.gotoAndPlay('all');
     this.animation.y = 2; // there is some white space between hero graphics and the bottom of the graphics file.
     this.addChild(this.animation);

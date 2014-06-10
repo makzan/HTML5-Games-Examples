@@ -25,7 +25,7 @@ rush.Coin = (function(){
     // frame: [x, y, width, height, imageIndex, regX, regY]
     var spritesheetData = {"images": ["images/coin.png"], "frames": [[0, 0, 16, 16, 0, 0, 0], [16, 0, 16, 16, 0, 0, 0], [32, 0, 16, 16, 0, 0, 0]], "animations": {"all": {"frames": [0, 1, 2, 1, 0], frequency:10}}}
     var spritesheet = new createjs.SpriteSheet(spritesheetData);
-    this.animation = new createjs.BitmapAnimation(spritesheet);
+    this.animation = new createjs.Sprite(spritesheet);
     this.animation.gotoAndPlay("all");
 
     this.addChild(this.animation);
