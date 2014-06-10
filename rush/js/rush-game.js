@@ -171,6 +171,9 @@ rush.Game = (function() {
     for (var i=0, len=this.camera.children.length; i<len; i++){
       var gameObject = this.camera.children[i];
 
+      // if it's removed (specifically: coins), we skip the object.
+      if (!gameObject) continue;
+
       // skip the game object if it is out of the screen.
       if (gameObject.isOutsideOfScreen) continue;
 
