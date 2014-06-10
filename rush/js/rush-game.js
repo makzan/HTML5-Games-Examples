@@ -35,8 +35,8 @@ rush.Game = (function() {
   p.resetGame = function() {
     this.camera.removeAllChildren();
     this.camera.x = 0;
-    createjs.Ticker.removeAllListeners();
-    createjs.Ticker.addListener(this, /*pausable=*/ true);
+    createjs.Ticker.removeAllEventListeners();
+    createjs.Ticker.addEventListener('tick', this.tick.bind(this));
   }
 
   p.initGame = function() {
@@ -88,9 +88,9 @@ rush.Game = (function() {
     hero.y = 100;
     this.camera.addChild(hero);
 
-    this.stage.onMouseDown = function() {
+    this.stage.on('stagemousedown', function() {
       hero.jump();
-    }
+    });
 
     this.updateView();
   }

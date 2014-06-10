@@ -20,7 +20,7 @@ rush.MovableGameObject = (function(){
     this.onGround = false;
 
     // Give heartbeat to MovableGameObject
-    createjs.Ticker.addListener(this, /*pausable=*/ true);
+    this.addEventListener('tick', this.tick.bind(this));
   }
 
   p.tick = function(timeElapsed) {
