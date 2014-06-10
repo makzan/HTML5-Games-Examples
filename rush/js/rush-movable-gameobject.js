@@ -24,6 +24,8 @@ rush.MovableGameObject = (function(){
   }
 
   p.tick = function(timeElapsed) {
+    if (createjs.Ticker.getPaused()) return; // tick when not paused.
+
     // apply gravity
     this.velocity.y += this.dropSpeed;
     this.velocity.y = Math.min(this.velocity.y, 5); // bound to max velocity

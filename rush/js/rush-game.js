@@ -96,6 +96,8 @@ rush.Game = (function() {
   }
 
   p.tick = function() {
+    if (createjs.Ticker.getPaused()) return; // tick when not paused.
+
     this.updateView();
 
     this.moveGameObjects();
