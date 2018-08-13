@@ -40,4 +40,4 @@ Originally designed from my book [HTML5 Games Development by Examples: Beginner'
 
 ## License
 
-All game code here is in MIT license.
+All game code here is under MIT license.
