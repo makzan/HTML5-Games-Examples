@@ -9,7 +9,6 @@
  *   
  * All Right Reserved.
  */
- 
 body {
 	text-align: center;	
 	font-family: 'Droid Serif', arial, serif;
@@ -225,7 +224,13 @@ a:hover {
 #popup.hide #popup-box{
 	margin-top: -800px;
 }
-
+/* button wasnt projecting the change of color  */
+/* USE THE FOLLOWING CODE SNIPPET */
+.kedia{
+margin-left:30px;
+margin-top:90px;
+color:black;
+}
 
 /**
  * Styles for the ribbon
